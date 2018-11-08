@@ -1,6 +1,7 @@
 from selenium import webdriver
 
-b = webdriver.Chrome("C:/Users/thoma/Documents/Python/chromedriver.exe")
+
+b = webdriver.Chrome("./chromedriver.exe")
 # Requesting the web version of whatsapp
 b.get('http://web.whatsapp.com')
 from time import sleep
@@ -114,6 +115,7 @@ while True:
 	elif msg=='change':
 		continue
 
+
 	modo=input("0- Várias mensagens\n1- Letra por letra\n")
 
 
@@ -125,11 +127,37 @@ while True:
 			try:
 				nvezes=int(input("Digite o número de vezes: "))
 
-				cond=True
-				for i in range(nvezes):
+				if '@' not in msg:
+					cond=True
+					elem1[0].clear()
+
 					elem1[0].send_keys(msg)
-					s=b.find_elements_by_class_name("_35EW6")
-					s[0].click()
+				else:
+					cond=True
+					elem1[0].clear()
+
+					msg = msg.split('@')
+					firstPart = msg.pop(0)
+					elem1[0].send_keys(firstPart)
+					for part in msg:
+						part = part.split()
+						elem1[0].send_keys('@' + part.pop(0))
+						elem1[0].send_keys(Keys.TAB)
+						part = ' '.join(part)
+						elem1[0].send_keys(part+" ")
+
+
+				elem1[0].send_keys(Keys.CONTROL, 'a')
+				elem1[0].send_keys(Keys.CONTROL, 'c')
+				for i in range(nvezes):
+					elem1[0].send_keys(Keys.CONTROL, 'v')
+					# s=b.find_elements_by_class_name("_35EW6")
+					# s[0].click()
+					elem1[0].send_keys(Keys.ENTER)
+
+
+
+
 			except KeyboardInterrupt:
 				pass
 
@@ -137,8 +165,9 @@ while True:
 			msg=msg.replace(" ","")
 			for i in msg:
 				elem1[0].send_keys(i)
-				s=b.find_elements_by_class_name("_35EW6")
-				s[0].click()
+				# s=b.find_elements_by_class_name("_35EW6")
+				# s[0].click()
+				elem1[0].send_keys(Keys.ENTER)
 
 		clear()
 	except:
