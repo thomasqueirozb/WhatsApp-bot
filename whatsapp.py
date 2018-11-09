@@ -1,46 +1,49 @@
 from selenium import webdriver
-
-
-b = webdriver.Chrome("./chromedriver.exe")
-# Requesting the web version of whatsapp
-b.get('http://web.whatsapp.com')
-from time import sleep
-
 from selenium.webdriver.common.keys import Keys
+from time import sleep
 from os import system
+import code
+
+# Abrir o Chrome driver
+b = webdriver.Chrome("./chromedriver.exe")
+
+# Entrar no Whatsapp Web
+b.get('http://web.whatsapp.com')
+
+
 def REPL():
-	while True:
-	    command=input(">>> ")
-	    if command in ["exit","exit()","quit","quit()"]:
-	        break
-	    try:
-	        exec(command)
-	        try:
-	            print(eval(command))
-	        except:
-	            pass
-	    except:
-	        print("fudeu bro")
+	# Para debug
+	variables = globals().copy()
+	variables.update(locals())
+	shell = code.InteractiveConsole(variables)
+	shell.interact()
 
 
 
 def clear():
+	# Limpar o console
 	_ = system('cls')
 
+
 while True:
+
 	nome = input("Digite o nome do grupo/pessoa: ").lower()
-	if nome=='exec':
+
+	if nome == 'exec' or nome == 'repl':
 		REPL()
 		continue
-	elem = b.find_elements_by_class_name("_25Ooe")#nome
-	cond=False
+	elif nome == "exit":
+		break
 
-	possiveis_nomes=[]
+	elem = b.find_elements_by_class_name("_25Ooe") # Chats
+	cond = False
+
+	possiveis_nomes = []
 
 
 	for i in range(len(elem)):
 		if elem[i].text.lower() == nome:
-			cond=True
+			cond = True
 			elem[i].click()
 			break
 		elif nome in str(elem[i].text.lower()):
@@ -65,15 +68,14 @@ while True:
 				pass
 
 	if not cond:
-		search = b.find_elements_by_class_name("jN-F5")
+		searchBox = b.find_elements_by_class_name("jN-F5")[0]
 
-		search[0].click()
-		search[0].clear()
-		search[0].send_keys(nome)
+		searchBox.click()
+		searchBox.clear()
+		searchBox.send_keys(nome)
 
 		try:
 			sleep(2)
-
 			elem = b.find_elements_by_class_name("_25Ooe")
 		except:
 			continue
@@ -99,7 +101,7 @@ while True:
 				try:
 					for i,j in zip(possiveis_nomes,range(len(possiveis_nomes))):
 						print(f'{j+1} - {i.text}')
-					name_index=int(input("Digite o número da pessoa/grupo"))+1
+					name_index = int(input("Digite o número da pessoa/grupo")) + 1
 					elem[name_index].click()
 					print(f'{elem[name_index].text} foi selecionado')
 					cond = True
@@ -108,69 +110,61 @@ while True:
 
 
 
-	msg=input("Digite a mensagem: ")
+	msg = input("Digite a mensagem: ")
 
-	if msg=="exit":
+	if msg == "exit":
 		break
-	elif msg=='change':
+	elif msg == 'change':
 		continue
 
 
-	modo=input("0- Várias mensagens\n1- Letra por letra\n")
+	modo = input("0- Várias mensagens\n1- Letra por letra\n> ")
 
 
 
 	try:
-		elem1 = b.find_elements_by_class_name('_2S1VP')#texto
-		# print(dir(elem1[0]))
+		txtBox = b.find_elements_by_class_name('_2S1VP')[0] # Caixa de texto
 		if modo == "0":
 			try:
 				nvezes=int(input("Digite o número de vezes: "))
+				cond = True
 
 				if '@' not in msg:
-					cond=True
-					elem1[0].clear()
-
-					elem1[0].send_keys(msg)
+					txtBox.clear()
+					txtBox.send_keys(msg)
 				else:
-					cond=True
-					elem1[0].clear()
-
+					txtBox.clear()
 					msg = msg.split('@')
 					firstPart = msg.pop(0)
-					elem1[0].send_keys(firstPart)
+					txtBox.send_keys(firstPart)
 					for part in msg:
 						part = part.split()
-						elem1[0].send_keys('@' + part.pop(0))
-						elem1[0].send_keys(Keys.TAB)
+						txtBox.send_keys('@' + part.pop(0))
+						txtBox.send_keys(Keys.TAB)
 						part = ' '.join(part)
-						elem1[0].send_keys(part+" ")
+						txtBox.send_keys(part + " ")
 
-
-				elem1[0].send_keys(Keys.CONTROL, 'a')
-				elem1[0].send_keys(Keys.CONTROL, 'c')
+				# Seleciona e copia
+				txtBox.send_keys(Keys.CONTROL, 'a')
+				txtBox.send_keys(Keys.CONTROL, 'c')
 				for i in range(nvezes):
-					elem1[0].send_keys(Keys.CONTROL, 'v')
-					# s=b.find_elements_by_class_name("_35EW6")
-					# s[0].click()
-					elem1[0].send_keys(Keys.ENTER)
-
-
-
+					# Cola
+					txtBox.send_keys(Keys.CONTROL, 'v')
+					txtBox.send_keys(Keys.ENTER)
 
 			except KeyboardInterrupt:
 				pass
 
 		elif modo == "1":
-			msg=msg.replace(" ","")
+			msg = msg.replace(" ","")
 			for i in msg:
-				elem1[0].send_keys(i)
-				# s=b.find_elements_by_class_name("_35EW6")
-				# s[0].click()
-				elem1[0].send_keys(Keys.ENTER)
+				txtBox.send_keys(i)
+				txtBox.send_keys(Keys.ENTER)
 
 		clear()
+
 	except:
 		print("Caixa de texto não encontrada")
+
 from sys import exit
 exit()
