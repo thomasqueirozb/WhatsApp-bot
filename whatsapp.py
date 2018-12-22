@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 from time import sleep
 import os, sys
 import code
@@ -11,7 +12,14 @@ options = webdriver.chrome.options.Options()
 options.add_argument("--disable-extensions")
 
 # Abrir o Chrome driver
-b = webdriver.Chrome("./chromedriver.exe", chrome_options = options)
+if os.name == "posix":
+	try:
+		b = webdriver.Chrome("./chromedriver_linux", options = options)
+	except WebDriverException:
+
+		b = webdriver.Chrome("./chromedriver_mac", options = options)
+else:
+	b = webdriver.Chrome("./chromedriver.exe", options = options)
 
 # Entrar no Whatsapp Web
 b.get('http://web.whatsapp.com')
@@ -178,45 +186,45 @@ while True:
 	else:
 		print('Foto')
 
-		try:
-			txtBox = b.find_elements_by_class_name('_2S1VP')[0] # Caixa de texto
-			from PIL import Image
-			from io import BytesIO
-			import win32clipboard
-			try:
-				nvezes = int(input("Digite o número de vezes: "))
-				cond = True
-				path = input("Path da photo: ")
-				path = rf'{path}'
+		# try:
+		# 	txtBox = b.find_elements_by_class_name('_2S1VP')[0] # Caixa de texto
+		# 	from PIL import Image
+		# 	from io import BytesIO
+		# 	import win32clipboard
+		# 	try:
+		# 		nvezes = int(input("Digite o número de vezes: "))
+		# 		cond = True
+		# 		path = input("Path da photo: ")
+		# 		path = rf'{path}'
 
-				# copiar imagem pro clipboard
-				def send_to_clipboard(clip_type, data):
-				    win32clipboard.OpenClipboard()
-				    win32clipboard.EmptyClipboard()
-				    win32clipboard.SetClipboardData(clip_type, data)
-				    win32clipboard.CloseClipboard()
+		# 		# copiar imagem pro clipboard
+		# 		def send_to_clipboard(clip_type, data):
+		# 		    win32clipboard.OpenClipboard()
+		# 		    win32clipboard.EmptyClipboard()
+		# 		    win32clipboard.SetClipboardData(clip_type, data)
+		# 		    win32clipboard.CloseClipboard()
 
-				image = Image.open(path)
+		# 		image = Image.open(path)
 
-				output = BytesIO()
-				image.convert("RGB").save(output, "BMP")
-				data = output.getvalue()[14:]
-				output.close()
+		# 		output = BytesIO()
+		# 		image.convert("RGB").save(output, "BMP")
+		# 		data = output.getvalue()[14:]
+		# 		output.close()
 
-				send_to_clipboard(win32clipboard.CF_DIB, data)
+		# 		send_to_clipboard(win32clipboard.CF_DIB, data)
 
-				for i in range(nvezes):
-					# Cola a imagem e manda
-					txtBox.send_keys(Keys.CONTROL, 'v')
-					txtBox.send_keys('.')
-					sleep(0.5)
-					enterbox = b.find_elements_by_class_name('_2S1VP')[0]
-					enterbox.send_keys(Keys.ENTER)
-					sleep(1.5)
-			except:
-				pass
-		except KeyboardInterrupt:
-			pass
+		# 		for i in range(nvezes):
+		# 			# Cola a imagem e manda
+		# 			txtBox.send_keys(Keys.CONTROL, 'v')
+		# 			txtBox.send_keys('.')
+		# 			sleep(0.5)
+		# 			enterbox = b.find_elements_by_class_name('_2S1VP')[0]
+		# 			enterbox.send_keys(Keys.ENTER)
+		# 			sleep(1.5)
+		# 	except:
+		# 		pass
+		# except KeyboardInterrupt:
+		# 	pass
 
 
 b.close()
