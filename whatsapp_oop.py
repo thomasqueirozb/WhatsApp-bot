@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 from time import sleep
-import os, sys
+import sys
 import code
 
 from bot import Bot
