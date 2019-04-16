@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -15,7 +16,7 @@ class Bot(Chrome):
     '''
     All elements types referenced in the help functions are selenium.webdriver.remote.webelement.WebElement
     '''
-    
+
     ############
     # Adaptação#
     ############
@@ -34,9 +35,9 @@ class Bot(Chrome):
                 file_name = "./chromedriver_mac"
         else:
             file_name = "./chromedriver.exe"
-        
+
         super().__init__(file_name, options=options)
-        
+
     def __enter__(self):
         '''
         Called when entering the with statement
@@ -58,7 +59,7 @@ class Bot(Chrome):
         if not error_type: 
             self.close()
             self.quit()
-    
+
     def wait_for_page(self):
         '''
         This function is called when entering the with statement right after http://web.whatsapp.com is entered.
@@ -84,7 +85,7 @@ class Bot(Chrome):
         while not self.find_elements_by_class_name('_1vDUw'):
             sleep(0.1)
         # print("deu")
-    
+
     #############
     # Essenciais#
     #############
@@ -95,7 +96,7 @@ class Bot(Chrome):
         This function clears the console (solely used for visual purposes)
         '''
         _ = os.system('cls' if os.name=='nt' else 'clear')
-    
+
     @staticmethod
     def copy_to_cipboard(text):
         '''
@@ -120,7 +121,7 @@ class Bot(Chrome):
         '''
         self.write_copied_message_element(element)
         element.send_keys(Keys.ENTER)
-    
+
 
     def write_message_element(self, element, text):
         '''
@@ -155,20 +156,21 @@ class Bot(Chrome):
         element.send_keys(Keys.ENTER)
 
     # def 
-    
+
     # def send_copied_message(self):
     #     self.element.
-    
-    
+
+
 
     # def find(self):
-        
+
     #     pass
 
 # Search bar loading icon class_name = _2xarx
 
 
 if __name__ == "__main__":
+    pass
     # with Bot() as b:
 
         # with open("whatsapp_load.html")

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from subprocess import call
 from os import getcwd
 
@@ -15,7 +16,7 @@ if msg == '':
 if msg.lower() not in ['exit', 'quit', 'q']:
     print('>>> git add *')
     call('git add *')
-    
+
     print(f'>>> git commit -m {msg}')
     call(f'git commit -m "{msg}"')
 
