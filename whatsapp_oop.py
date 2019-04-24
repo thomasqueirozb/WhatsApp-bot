@@ -6,13 +6,13 @@ import code
 
 from bot import Bot
 
-def REPL():
-	# Para debug
-	variables = globals().copy()
-	variables.update(locals())
-	shell = code.InteractiveConsole(variables)
-	shell.interact()
 
+def REPL():
+    # Para debug
+    variables = globals().copy()
+    variables.update(locals())
+    shell = code.InteractiveConsole(variables)
+    shell.interact()
 
 
 with Bot() as b:
@@ -29,11 +29,10 @@ with Bot() as b:
         elif nome == "exit":
             break
 
-        elem = b.find_elements_by_class_name("_25Ooe") # Chats
+        elem = b.find_elements_by_class_name("_25Ooe")  # Chats
         cond = False
 
         possiveis_nomes = []
-
 
         for i in range(len(elem)):
             if elem[i].text.lower() == nome:
@@ -41,7 +40,7 @@ with Bot() as b:
                 elem[i].click()
                 break
             elif nome in str(elem[i].text.lower()):
-                possiveis_nomes.append([elem[i],i])
+                possiveis_nomes.append([elem[i], i])
 
         else:
             if len(possiveis_nomes) == 1:
@@ -97,18 +96,15 @@ with Bot() as b:
                     try:
                         for j, i in enumerate(possiveis_nomes):
                             print(f'{j+1} - {i.text}')
-                        name_index = int(input("Digite o número da pessoa/grupo")) + 1
+                        name_index = input("Digite o número da pessoa/grupo")
+                        name_index += int(1)
                         elem[name_index].click()
                         print(f'{elem[name_index].text} foi selecionado')
                         cond = True
                     except:
                         pass
 
-
-
         msg = input("Digite a mensagem ou 'foto': ")
-
-
 
         if msg == 'exit':
             break
@@ -119,10 +115,11 @@ with Bot() as b:
             modo = input("0- Várias mensagens\n1- Letra por letra\n> ")
 
             try:
-                txtBox = b.find_elements_by_class_name('_2S1VP')[0] # Caixa de texto
+                # Caixa de texto
+                txtBox = b.find_elements_by_class_name('_2S1VP')[0]
                 if modo == "0":
                     try:
-                        nvezes=int(input("Digite o número de vezes: "))
+                        nvezes = int(input("Digite o número de vezes: "))
                         cond = True
                         txtBox.clear()
 
@@ -151,12 +148,12 @@ with Bot() as b:
                         pass
 
                 elif modo == "1":
-                    msg = msg.replace(" ","")
+                    msg = msg.replace(" ", "")
                     for i in msg:
                         txtBox.send_keys(i)
                         txtBox.send_keys(Keys.ENTER)
 
-                clear()
+                b.clear_console()
 
             except:
                 print("Caixa de texto não encontrada")
@@ -164,44 +161,45 @@ with Bot() as b:
             print('Foto')
 
             # try:
-            # 	txtBox = b.find_elements_by_class_name('_2S1VP')[0] # Caixa de texto
-            # 	from PIL import Image
-            # 	from io import BytesIO
-            # 	import win32clipboard
-            # 	try:
-            # 		nvezes = int(input("Digite o número de vezes: "))
-            # 		cond = True
-            # 		path = input("Path da photo: ")
-            # 		path = rf'{path}'
+            #   # Caixa de texto
+            #     txtBox = b.find_elements_by_class_name('_2S1VP')[0]
+            #     from PIL import Image
+            #     from io import BytesIO
+            #     import win32clipboard
+            #     try:
+            #         nvezes = int(input("Digite o número de vezes: "))
+            #         cond = True
+            #         path = input("Path da photo: ")
+            #         path = rf'{path}'
 
-            # 		# copiar imagem pro clipboard
-            # 		def send_to_clipboard(clip_type, data):
-            # 		    win32clipboard.OpenClipboard()
-            # 		    win32clipboard.EmptyClipboard()
-            # 		    win32clipboard.SetClipboardData(clip_type, data)
-            # 		    win32clipboard.CloseClipboard()
+            #         # copiar imagem pro clipboard
+            #         def send_to_clipboard(clip_type, data):
+            #             win32clipboard.OpenClipboard()
+            #             win32clipboard.EmptyClipboard()
+            #             win32clipboard.SetClipboardData(clip_type, data)
+            #             win32clipboard.CloseClipboard()
 
-            # 		image = Image.open(path)
+            #         image = Image.open(path)
 
-            # 		output = BytesIO()
-            # 		image.convert("RGB").save(output, "BMP")
-            # 		data = output.getvalue()[14:]
-            # 		output.close()
+            #         output = BytesIO()
+            #         image.convert("RGB").save(output, "BMP")
+            #         data = output.getvalue()[14:]
+            #         output.close()
 
-            # 		send_to_clipboard(win32clipboard.CF_DIB, data)
+            #         send_to_clipboard(win32clipboard.CF_DIB, data)
 
-            # 		for i in range(nvezes):
-            # 			# Cola a imagem e manda
-            # 			txtBox.send_keys(Keys.CONTROL, 'v')
-            # 			txtBox.send_keys('.')
-            # 			sleep(0.5)
-            # 			enterbox = b.find_elements_by_class_name('_2S1VP')[0]
-            # 			enterbox.send_keys(Keys.ENTER)
-            # 			sleep(1.5)
-            # 	except:
-            # 		pass
+            #         for i in range(nvezes):
+            #             # Cola a imagem e manda
+            #             txtBox.send_keys(Keys.CONTROL, 'v')
+            #             txtBox.send_keys('.')
+            #             sleep(0.5)
+            #             enterbox = b.find_elements_by_class_name('_2S1VP')[0]
+            #             enterbox.send_keys(Keys.ENTER)
+            #             sleep(1.5)
+            #     except:
+            #         pass
             # except KeyboardInterrupt:
-            # 	pass
+            #     pass
 
 
 b.close()

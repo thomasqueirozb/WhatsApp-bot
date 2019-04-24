@@ -5,7 +5,7 @@ from os import getcwd
 path = getcwd()
 
 print(f'>>> cd {path}')
-call(f'cd {path}', shell = True)
+call(f'cd {path}', shell=True)
 
 msg = input("Commit message: ")
 
